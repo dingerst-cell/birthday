@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alles Gute zum 65.!</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/* ======================================================
+   EINSTELLUNGEN – hier einfach anpassen
+   (Texte stehen weiter unten im <script> unter CONFIG)
+   ====================================================== */
+:root{
+  --no-red:#BA0C2F; --no-blue:#00205B; --white:#ffffff;
+  --de-black:#1a1a1a; --de-red:#DD0000; --de-gold:#FFCE00;
+  --sky1:#0b2a5c; --sky2:#3c6fb0; --sky3:#f6c48a;
+  --sea1:#1d5f95; --sea2:#0d3d6b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--sky1);
+  font-family:'Nunito',Arial,sans-serif;color:#fff}
+#stage{position:relative;width:100vw;height:100vh;overflow:hidden;
+  background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 48%,var(--sky3) 70%,#f9dcb0 74%)}
+
+/* Bunting */
+.bunting{position:absolute;top:0;left:0;right:0;height:9vh;z-index:5}
+.bunting svg{width:100%;height:100%}
+
+/* Header text */
+.head{position:absolute;top:10.5vh;left:0;right:0;text-align:center;z-index:6}
+.greet{font-weight:800;font-size:2.6vh;letter-spacing:.35em;text-transform:uppercase;opacity:.9}
+.greet span{display:inline-block;margin:0 .6em}
+.title{font-family:'Playfair Display',Georgia,serif;font-weight:900;line-height:1;
+  font-size:7.4vh;margin-top:1vh;text-shadow:0 .4vh 1.2vh rgba(0,0,0,.35)}
+.big65{font-family:'Playfair Display',Georgia,serif;font-weight:900;font-size:24vh;line-height:.9;
+  background:linear-gradient(180deg,#fff6c2 0%,var(--de-gold) 45%,#d99a00 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 .6vh 0 rgba(0,0,0,.25));animation:pulse 3.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.sub{font-size:3.2vh;font-weight:700;margin-top:.5vh;text-shadow:0 .2vh .6vh rgba(0,0,0,.4)}
+
+/* Side cards */
+.card{position:absolute;z-index:7;background:rgba(0,20,60,.45);border:.2vh solid rgba(255,255,255,.25);
+  border-radius:2vh;padding:1.6vh 2vh;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  box-shadow:0 1vh 3vh rgba(0,0,0,.25)}
+#clockCard{top:14vh;left:2.5vw;width:21vw;text-align:center}
+#clock{font-size:7vh;font-weight:800;line-height:1}
+#date{font-size:2.3vh;opacity:.9;margin-top:.6vh}
+#countCard{top:14vh;right:2.5vw;width:21vw;text-align:center}
+#countLabel{font-size:2.1vh;letter-spacing:.15em;text-transform:uppercase;opacity:.85}
+#countValue{font-size:5.4vh;font-weight:800;line-height:1.1;margin-top:.6vh;color:var(--de-gold)}
+#countSub{font-size:2.1vh;opacity:.9;margin-top:.4vh}
+#msgCard{left:50%;transform:translateX(-50%);top:51vh;width:60vw;padding:1.2vh 2vh;text-align:center;
+  font-size:2.9vh;font-weight:700;background:rgba(255,255,255,.92);color:var(--no-blue)}
+#msgCard small{display:block;font-weight:400;font-size:2.1vh;color:#33507f;margin-top:.3vh}
+
+/* Scene */
+.scene{position:absolute;left:0;right:0;bottom:0;height:42vh;z-index:3}
+.scene svg.land{position:absolute;bottom:0;left:0;width:100%;height:100%}
+.shore .flag svg{display:block;width:100%;height:100%}
+.waves{position:absolute;left:0;bottom:0;width:200%;height:15vh;z-index:4}
+.w1{animation:waves 14s linear infinite}
+.w2{animation:waves 9s linear infinite reverse;opacity:.75}
+@keyframes waves{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Ship */
+#shipWrap{position:absolute;bottom:7.5vh;left:0;width:36vh;height:20.4vh;z-index:4;
+  animation:sail 70s linear infinite;animation-delay:-28s}
+#ship{width:100%;height:100%;animation:bob 4s ease-in-out infinite;transform-origin:50% 80%}
+@keyframes sail{0%{left:-32vh}100%{left:104vw}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-.8deg)}50%{transform:translateY(-.8vh) rotate(.8deg)}}
+.smoke{animation:smoke 3s ease-out infinite;opacity:0}
+.smoke.s2{animation-delay:1s}.smoke.s3{animation-delay:2s}
+@keyframes smoke{0%{opacity:.7;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(-30px,-40px) scale(1.8)}}
+
+/* Shore labels */
+.shore{position:absolute;bottom:17vh;z-index:5;font-weight:800;font-size:2vh;
+  background:rgba(0,0,0,.35);padding:.4vh 1vh;border-radius:1vh;display:flex;align-items:center;gap:.8vh}
+.shore .flag{width:3.6vh;height:2.5vh;border-radius:.3vh;overflow:hidden;box-shadow:0 0 0 .15vh #fff}
+#shoreDE{left:15vw}
+#shoreNO{right:1.5vw}
+
+/* Confetti & stars */
+#confetti{position:absolute;inset:0;z-index:10;pointer-events:none}
+.star{position:absolute;width:.4vh;height:.4vh;background:#fff;border-radius:50%;animation:tw 3s infinite}
+@keyframes tw{0%,100%{opacity:.2}50%{opacity:1}}
+
+/* ---------- Geschenk & Torte ---------- */
+#gift{position:absolute;left:4vw;top:31vh;width:17vw;z-index:7;cursor:pointer;text-align:center;
+  -webkit-tap-highlight-color:transparent}
+#gift svg{width:100%;height:auto;animation:wiggle 2.6s ease-in-out infinite;transform-origin:50% 90%;
+  filter:drop-shadow(0 1vh 1.2vh rgba(0,0,0,.35))}
+#gift .hint{display:inline-block;margin-top:.6vh;font-weight:800;font-size:2.2vh;
+  background:var(--de-gold);color:#00205B;padding:.5vh 1.4vh;border-radius:2vh;animation:hint 1.6s ease-in-out infinite}
+@keyframes wiggle{0%,60%,100%{transform:rotate(0)}65%{transform:rotate(-6deg)}70%{transform:rotate(6deg)}
+  75%{transform:rotate(-5deg)}80%{transform:rotate(4deg)}85%{transform:rotate(0)}}
+@keyframes hint{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+#gift.gone{display:none}
+
+#overlay{position:absolute;inset:0;z-index:9;display:none;align-items:center;justify-content:center;flex-direction:column;
+  background:radial-gradient(circle at 50% 55%,rgba(255,206,0,.35) 0%,rgba(255,206,0,0) 55%),linear-gradient(180deg,#0b2a5c,#00143c)}
+#overlay.show{display:flex}
+#bigGift{position:absolute;width:40vh;left:50%;top:50%;transform:translate(-50%,-50%)}
+#bigGift svg{width:100%;height:auto}
+#bigGift.shake svg{animation:shake .12s linear infinite}
+@keyframes shake{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-4px,2px) rotate(-3deg)}
+  50%{transform:translate(4px,-2px) rotate(3deg)}75%{transform:translate(-3px,-1px) rotate(-2deg)}100%{transform:translate(0,0)}}
+#lid{transition:transform 1s cubic-bezier(.2,.8,.3,1),opacity 1s}
+#bigGift.open #lid{transform:translate(120px,-420px) rotate(70deg);opacity:0}
+#bigGift.open #box{animation:boxOut .9s .3s forwards}
+@keyframes boxOut{to{opacity:0;transform:translateY(40px) scale(.8)}}
+
+#cake{width:58vh;opacity:0;transform:scale(.2) translateY(30vh);transition:transform 1.2s cubic-bezier(.2,1.4,.4,1),opacity .6s}
+#cake.show{opacity:1;transform:scale(1) translateY(0)}
+#cake svg{width:100%;height:auto;overflow:visible}
+.flame{transform-origin:50% 100%;transform-box:fill-box;animation:flick .25s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scale(1,1) rotate(-3deg)}to{transform:scale(.9,1.12) rotate(3deg)}}
+.out .flame{animation:none;opacity:0;transition:opacity .4s}
+.puff{opacity:0}
+.out .puff{animation:puff 1.6s ease-out forwards}
+@keyframes puff{0%{opacity:.8;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px)}}
+
+#cakeText{font-family:'Playfair Display',Georgia,serif;font-weight:900;font-size:6.5vh;text-align:center;
+  text-shadow:0 .4vh 1vh rgba(0,0,0,.5);opacity:0;transition:opacity 1s .8s;margin-bottom:1vh}
+#cakeHint{font-size:2.4vh;font-weight:800;margin-top:1.2vh;opacity:0;transition:opacity 1s 1.4s}
+#overlay.cake #cakeText,#overlay.cake #cakeHint{opacity:1}
+#closeBtn{position:absolute;top:3vh;right:3vw;font-size:3vh;font-weight:800;background:rgba(255,255,255,.15);
+  border:.2vh solid rgba(255,255,255,.4);color:#fff;border-radius:3vh;padding:.8vh 2vh;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- Wimpelkette: Norwegen & Deutschland im Wechsel -->
+  <div class="bunting"><svg id="buntingSvg" viewBox="0 0 1280 90" preserveAspectRatio="none"></svg></div>
+
+  <div class="head">
+    <div class="greet"><span>Herzlichen Glückwunsch</span>✦<span>Gratulerer med dagen</span></div>
+    <div class="title" id="title">Alles Gute, Mama!</div>
+    <div class="big65">65</div>
+    <div class="sub" id="sub">Leinen los für ein neues Lebensjahr ⚓</div>
+  </div>
+
+  <div class="card" id="clockCard">
+    <div id="clock">--:--</div>
+    <div id="date">&nbsp;</div>
+  </div>
+
+  <div class="card" id="countCard">
+    <div id="countLabel">Noch bis zum Geburtstag</div>
+    <div id="countValue">–</div>
+    <div id="countSub">&nbsp;</div>
+  </div>
+
+  <!-- Landschaft: links flaches Deutschland, rechts norwegische Fjorde -->
+  <div class="scene">
+    <svg class="land" viewBox="0 0 1280 420" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="mtn1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#5a6f97"/><stop offset="1" stop-color="#2c3f66"/>
+        </linearGradient>
+        <linearGradient id="mtn2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3b5078"/><stop offset="1" stop-color="#1b2b4c"/>
+        </linearGradient>
+        <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2a74ad"/><stop offset="1" stop-color="#0d3d6b"/>
+        </linearGradient>
+      </defs>
+      <!-- Sonne -->
+      <circle cx="640" cy="250" r="70" fill="#ffe3a3" opacity=".75"/>
+      <!-- Norwegen: Berge rechts -->
+      <polygon fill="url(#mtn1)" points="700,300 820,150 880,210 960,90 1040,190 1100,120 1180,200 1280,110 1280,300"/>
+      <polygon fill="#fff" opacity=".9" points="960,90 985,122 970,118 955,130 940,115"/>
+      <polygon fill="#fff" opacity=".9" points="1100,120 1118,142 1104,138 1092,148 1085,138"/>
+      <polygon fill="#fff" opacity=".9" points="1280,110 1280,140 1262,128 1250,135"/>
+      <polygon fill="url(#mtn2)" points="820,300 900,200 980,260 1060,170 1150,250 1230,190 1280,230 1280,300"/>
+      <!-- kleine rote Hütten -->
+      <rect x="1000" y="282" width="18" height="12" fill="#BA0C2F"/><polygon points="997,282 1009,272 1021,282" fill="#5a1a1a"/>
+      <rect x="1040" y="286" width="14" height="10" fill="#BA0C2F"/><polygon points="1037,286 1047,278 1057,286" fill="#5a1a1a"/>
+      <!-- Deutschland: sanfte Hügel links mit Leuchtturm -->
+      <path fill="#3d6b4a" d="M0,300 L0,240 C80,225 160,235 240,250 C300,262 360,270 420,300 Z"/>
+      <path fill="#2f5a3c" d="M0,300 L0,265 C100,255 220,265 340,300 Z"/>
+      <rect x="150" y="190" width="18" height="60" fill="#fff"/>
+      <rect x="150" y="205" width="18" height="10" fill="#DD0000"/>
+      <rect x="150" y="228" width="18" height="10" fill="#DD0000"/>
+      <rect x="146" y="182" width="26" height="10" fill="#1a1a1a"/>
+      <circle cx="159" cy="180" r="6" fill="#FFCE00"><animate attributeName="opacity" values="1;.2;1" dur="2s" repeatCount="indefinite"/></circle>
+      <!-- Meer -->
+      <rect x="0" y="295" width="1280" height="125" fill="url(#sea)"/>
+      <ellipse cx="640" cy="320" rx="160" ry="6" fill="#ffe3a3" opacity=".35"/>
+    </svg>
+
+    <div id="shoreDE" class="shore">
+      <div class="flag"><svg viewBox="0 0 5 3" width="100%" height="100%"><rect width="5" height="1" fill="#1a1a1a"/><rect y="1" width="5" height="1" fill="#DD0000"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg></div>
+      Deutschland
+    </div>
+    <div id="shoreNO" class="shore">
+      Norge
+      <div class="flag"><svg viewBox="0 0 22 16" width="100%" height="100%"><rect width="22" height="16" fill="#BA0C2F"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#00205B"/><rect y="7" width="22" height="2" fill="#00205B"/></svg></div>
+    </div>
+
+    <!-- Kreuzfahrtschiff -->
+    <div id="shipWrap">
+      <svg id="ship" viewBox="0 0 300 170">
+        <!-- Rauch -->
+        <circle class="smoke"    cx="196" cy="28" r="10" fill="#ddd"/>
+        <circle class="smoke s2" cx="196" cy="28" r="10" fill="#ddd"/>
+        <circle class="smoke s3" cx="196" cy="28" r="10" fill="#ddd"/>
+        <!-- Schornstein -->
+        <path d="M184,40 L210,40 L206,78 L188,78 Z" fill="#BA0C2F"/>
+        <rect x="186" y="50" width="22" height="6" fill="#fff"/>
+        <rect x="186" y="58" width="22" height="4" fill="#00205B"/>
+        <!-- Aufbauten -->
+        <path d="M70,110 L80,78 L250,78 L262,110 Z" fill="#f4f6fa"/>
+        <path d="M95,80 L104,58 L232,58 L240,80 Z" fill="#fff"/>
+        <path d="M122,60 L130,44 L178,44 L184,60 Z" fill="#fff"/>
+        <!-- Fenster -->
+        <g fill="#3a76b8">
+          <rect x="90" y="88" width="160" height="6" rx="3"/>
+          <rect x="88" y="98" width="166" height="5" rx="2.5"/>
+          <rect x="110" y="66" width="120" height="6" rx="3"/>
+          <rect x="136" y="49" width="40" height="5" rx="2.5"/>
+        </g>
+        <!-- Rumpf -->
+        <path d="M20,108 L286,108 L268,150 L44,150 Z" fill="#fff"/>
+        <path d="M30,132 L278,132 L268,150 L44,150 Z" fill="#00205B"/>
+        <rect x="26" y="120" width="256" height="4" fill="#DD0000"/>
+        <rect x="26" y="124" width="256" height="3" fill="#FFCE00"/>
+        <g fill="#1d3f70">
+          <circle cx="60" cy="114" r="2.4"/><circle cx="80" cy="114" r="2.4"/><circle cx="100" cy="114" r="2.4"/>
+          <circle cx="120" cy="114" r="2.4"/><circle cx="140" cy="114" r="2.4"/><circle cx="160" cy="114" r="2.4"/>
+          <circle cx="180" cy="114" r="2.4"/><circle cx="200" cy="114" r="2.4"/><circle cx="220" cy="114" r="2.4"/>
+          <circle cx="240" cy="114" r="2.4"/><circle cx="260" cy="114" r="2.4"/>
+        </g>
+        <text x="150" y="145" text-anchor="middle" font-family="Nunito,Arial" font-weight="800" font-size="11" fill="#fff" letter-spacing="2">MS 65 · GEBURTSTAG</text>
+        <!-- Mast mit Flaggen -->
+        <line x1="270" y1="108" x2="270" y2="60" stroke="#999" stroke-width="2"/>
+        <line x1="40" y1="108" x2="40" y2="70" stroke="#999" stroke-width="2"/>
+        <g transform="translate(270,60)"><rect width="22" height="16" fill="#BA0C2F"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#00205B"/><rect y="7" width="22" height="2" fill="#00205B"/></g>
+        <g transform="translate(40,70)"><rect width="20" height="4" fill="#1a1a1a"/><rect y="4" width="20" height="4" fill="#DD0000"/><rect y="8" width="20" height="4" fill="#FFCE00"/></g>
+        <!-- Luftballons -->
+        <line x1="150" y1="44" x2="146" y2="18" stroke="#ccc"/><circle cx="146" cy="12" r="8" fill="#DD0000"/>
+        <line x1="156" y1="44" x2="164" y2="16" stroke="#ccc"/><circle cx="164" cy="10" r="8" fill="#FFCE00"/>
+        <line x1="153" y1="44" x2="154" y2="10" stroke="#ccc"/><circle cx="154" cy="4" r="7" fill="#fff"/>
+      </svg>
+    </div>
+
+    <!-- Wellen -->
+    <svg class="waves w2" viewBox="0 0 2560 150" preserveAspectRatio="none" style="bottom:2vh">
+      <path fill="#2a74ad" d="M0,60 Q80,30 160,60 T320,60 T480,60 T640,60 T800,60 T960,60 T1120,60 T1280,60 T1440,60 T1600,60 T1760,60 T1920,60 T2080,60 T2240,60 T2400,60 T2560,60 V150 H0Z"/>
+    </svg>
+    <svg class="waves w1" viewBox="0 0 2560 150" preserveAspectRatio="none">
+      <path fill="#0d3d6b" d="M0,80 Q100,50 200,80 T400,80 T600,80 T800,80 T1000,80 T1200,80 T1400,80 T1600,80 T1800,80 T2000,80 T2200,80 T2400,80 T2560,80 V150 H0Z"/>
+    </svg>
+  </div>
+
+  <div class="card" id="msgCard">
+    <span id="msg">&nbsp;</span>
+    <small id="msg2">&nbsp;</small>
+  </div>
+
+
+  <!-- Geschenk zum Antippen -->
+  <div id="gift" onclick="openGift()">
+    <svg viewBox="0 0 200 200">
+      <g >
+        <rect x="25" y="85" width="150" height="105" rx="6" fill="#BA0C2F"/>
+        <rect x="88" y="85" width="24" height="105" fill="#FFCE00"/>
+        <rect x="25" y="125" width="150" height="10" fill="#fff" opacity=".9"/>
+        <rect x="25" y="128" width="150" height="4" fill="#00205B"/>
+      </g>
+      <g >
+        <rect x="15" y="62" width="170" height="30" rx="6" fill="#d0153a"/>
+        <rect x="88" y="62" width="24" height="30" fill="#FFCE00"/>
+        <path d="M100,62 C70,20 40,30 55,55 C62,66 85,64 100,62Z" fill="#FFCE00" stroke="#d99a00" stroke-width="2"/>
+        <path d="M100,62 C130,20 160,30 145,55 C138,66 115,64 100,62Z" fill="#FFCE00" stroke="#d99a00" stroke-width="2"/>
+        <circle cx="100" cy="60" r="9" fill="#1a1a1a"/>
+      </g>
+    </svg>
+    <div class="hint">🎁 Tippen zum Öffnen</div>
+  </div>
+
+  <div id="overlay">
+    <button id="closeBtn" onclick="closeGift(event)">✕ Schließen</button>
+    <div id="bigGift"><svg viewBox="0 0 200 200">
+      <g id="box">
+        <rect x="25" y="85" width="150" height="105" rx="6" fill="#BA0C2F"/>
+        <rect x="88" y="85" width="24" height="105" fill="#FFCE00"/>
+        <rect x="25" y="125" width="150" height="10" fill="#fff" opacity=".9"/>
+        <rect x="25" y="128" width="150" height="4" fill="#00205B"/>
+      </g>
+      <g id="lid">
+        <rect x="15" y="62" width="170" height="30" rx="6" fill="#d0153a"/>
+        <rect x="88" y="62" width="24" height="30" fill="#FFCE00"/>
+        <path d="M100,62 C70,20 40,30 55,55 C62,66 85,64 100,62Z" fill="#FFCE00" stroke="#d99a00" stroke-width="2"/>
+        <path d="M100,62 C130,20 160,30 145,55 C138,66 115,64 100,62Z" fill="#FFCE00" stroke="#d99a00" stroke-width="2"/>
+        <circle cx="100" cy="60" r="9" fill="#1a1a1a"/>
+      </g>
+    </svg></div>
+    <div id="cakeText">Zum Geburtstag viel Glück! 🎉</div>
+    <div id="cake" onclick="blowOut()"><svg viewBox="0 0 400 380">
+      <!-- Teller -->
+      <ellipse cx="200" cy="350" rx="190" ry="22" fill="#e9edf5"/>
+      <ellipse cx="200" cy="345" rx="170" ry="16" fill="#fff"/>
+      <!-- untere Etage -->
+      <rect x="45" y="230" width="310" height="115" rx="14" fill="#f7d9b5"/>
+      <rect x="45" y="290" width="310" height="14" fill="#BA0C2F"/>
+      <rect x="45" y="304" width="310" height="6" fill="#00205B"/>
+      <path d="M45,240 Q45,226 60,226 L340,226 Q355,226 355,240 L355,252 Q340,268 325,252 Q310,272 295,252 Q280,268 265,252 Q250,274 235,252 Q220,268 205,252 Q190,272 175,252 Q160,268 145,252 Q130,274 115,252 Q100,268 85,252 Q70,272 55,252 Q45,262 45,252Z" fill="#fff"/>
+      <g fill="#FFCE00"><circle cx="80" cy="325" r="5"/><circle cx="140" cy="325" r="5"/><circle cx="200" cy="325" r="5"/><circle cx="260" cy="325" r="5"/><circle cx="320" cy="325" r="5"/></g>
+      <!-- obere Etage -->
+      <rect x="95" y="140" width="210" height="95" rx="12" fill="#c96f4a"/>
+      <rect x="95" y="190" width="210" height="8" fill="#1a1a1a"/>
+      <rect x="95" y="198" width="210" height="8" fill="#DD0000"/>
+      <rect x="95" y="206" width="210" height="8" fill="#FFCE00"/>
+      <path d="M95,150 Q95,136 108,136 L292,136 Q305,136 305,150 L305,160 Q293,176 281,160 Q269,180 257,160 Q245,176 233,160 Q221,180 209,160 Q197,176 185,160 Q173,180 161,160 Q149,176 137,160 Q125,180 113,160 Q101,172 95,160Z" fill="#fff"/>
+      <g fill="#BA0C2F"><circle cx="120" cy="150" r="6"/><circle cx="160" cy="146" r="6"/><circle cx="240" cy="146" r="6"/><circle cx="280" cy="150" r="6"/></g>
+      <!-- Zahlenkerzen 6 und 5 -->
+      <text x="170" y="138" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-weight="900" font-size="88" fill="#FFCE00" stroke="#d99a00" stroke-width="3">6</text>
+      <text x="230" y="138" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-weight="900" font-size="88" fill="#FFCE00" stroke="#d99a00" stroke-width="3">5</text>
+      <line x1="170" y1="78" x2="170" y2="66" stroke="#333" stroke-width="2"/>
+      <line x1="230" y1="78" x2="230" y2="66" stroke="#333" stroke-width="2"/>
+      <!-- kleine Kerzen auf der unteren Etage -->
+      <g id="candles"></g>
+      <!-- Flammen -->
+      <g id="flames"></g>
+      <g id="puffs"></g>
+    </svg></div>
+    <div id="cakeHint">Tippe auf die Torte, um die Kerzen auszupusten 🌬️</div>
+  </div>
+  <canvas id="confetti"></canvas>
+</div>
+
+<script>
+/* ======================================================
+   CONFIG – Texte und Datum hier ändern
+   ====================================================== */
+var CONFIG = {
+  anrede:   "Mama",                    // Name / Anrede im Titel
+  monat:    11,                        // Geburtstag: Monat (1-12)
+  tag:      24,                        // Geburtstag: Tag
+  alter:    65,
+  // Kurze Nachricht unten (einfach ändern und index.html neu hochladen)
+  nachricht: "Wir freuen uns so, dass du mit dem Schiff zu uns nach Norwegen kommst!",
+  nachricht2: "Velkommen om bord – bis ganz bald! ❤️"
+};
+
+/* ---------- Wimpelkette ---------- */
+(function(){
+  var svg=document.getElementById('buntingSvg'), ns='http://www.w3.org/2000/svg', html='';
+  html+='<path d="M0,8 Q640,40 1280,8" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>';
+  var n=20;
+  for(var i=0;i<n;i++){
+    var x=i*(1280/n)+8, w=1280/n-16, t=i/(n-1);
+    var y=8+ (40-8)*4*t*(1-t)*0.95; // sag
+    var id='f'+i, isNo=(i%2===0);
+    html+='<clipPath id="'+id+'"><polygon points="'+x+','+y+' '+(x+w)+','+y+' '+(x+w/2)+','+(y+62)+'"/></clipPath>';
+    html+='<g clip-path="url(#'+id+')">';
+    if(isNo){
+      html+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="64" fill="#BA0C2F"/>'+
+            '<rect x="'+(x+w*0.3)+'" y="'+y+'" width="'+(w*0.18)+'" height="64" fill="#fff"/>'+
+            '<rect x="'+x+'" y="'+(y+16)+'" width="'+w+'" height="12" fill="#fff"/>'+
+            '<rect x="'+(x+w*0.345)+'" y="'+y+'" width="'+(w*0.09)+'" height="64" fill="#00205B"/>'+
+            '<rect x="'+x+'" y="'+(y+19)+'" width="'+w+'" height="6" fill="#00205B"/>';
+    } else {
+      html+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="21" fill="#1a1a1a"/>'+
+            '<rect x="'+x+'" y="'+(y+21)+'" width="'+w+'" height="21" fill="#DD0000"/>'+
+            '<rect x="'+x+'" y="'+(y+42)+'" width="'+w+'" height="22" fill="#FFCE00"/>';
+    }
+    html+='</g>';
+  }
+  svg.innerHTML=html;
+})();
+
+/* ---------- Sterne am Himmel ---------- */
+(function(){
+  var st=document.getElementById('stage');
+  for(var i=0;i<40;i++){
+    var s=document.createElement('div'); s.className='star';
+    s.style.left=(Math.random()*100)+'vw'; s.style.top=(10+Math.random()*30)+'vh';
+    s.style.animationDelay=(Math.random()*3)+'s';
+    st.appendChild(s);
+  }
+})();
+
+/* ---------- Texte, Uhr, Countdown ---------- */
+var TAGE=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+var MON=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+function pad(n){return (n<10?'0':'')+n;}
+var celebrate=false;
+
+document.getElementById('title').textContent='Alles Gute, '+CONFIG.anrede+'!';
+document.getElementById('msg').textContent=CONFIG.nachricht;
+document.getElementById('msg2').textContent=CONFIG.nachricht2;
+
+function tick(){
+  var now=new Date();
+  document.getElementById('clock').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
+  document.getElementById('date').textContent=TAGE[now.getDay()]+', '+now.getDate()+'. '+MON[now.getMonth()];
+
+  var y=now.getFullYear();
+  var bday=new Date(y,CONFIG.monat-1,CONFIG.tag);
+  var bdayEnd=new Date(y,CONFIG.monat-1,CONFIG.tag+1);
+  var label=document.getElementById('countLabel'),
+      val=document.getElementById('countValue'),
+      sub=document.getElementById('countSub'),
+      subtitle=document.getElementById('sub');
+
+  if(now>=bday && now<bdayEnd){
+    celebrate=true;
+    label.textContent='Heute ist';
+    val.textContent='dein Tag! 🎉';
+    sub.textContent='Hipp hipp hurra – hurra – hurra!';
+    subtitle.textContent='Happy Birthday an Bord! 🛳️🎂';
+  } else {
+    celebrate=false;
+    var target=(now<bday)?bday:new Date(y+1,CONFIG.monat-1,CONFIG.tag);
+    var diff=target-now;
+    var d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000), m=Math.floor((diff%3600000)/60000);
+    if(now>=bdayEnd && (now-bdayEnd)<14*86400000){
+      label.textContent='Nachträglich';
+      val.textContent='alles Liebe!';
+      sub.textContent='zum '+CONFIG.alter+'. Geburtstag';
+      subtitle.textContent='Gute Fahrt ins neue Lebensjahr ⚓';
+    } else {
+      label.textContent='Noch bis zum Geburtstag';
+      val.textContent= d>0 ? (d+(d===1?' Tag':' Tage')) : (h+' Std '+m+' Min');
+      sub.textContent= d>0 ? (h+' Std '+m+' Min') : 'Gleich ist es so weit!';
+      subtitle.textContent='Leinen los für ein neues Lebensjahr ⚓';
+    }
+  }
+}
+tick(); setInterval(tick,15000);
+
+/* ---------- Konfetti in Flaggenfarben ---------- */
+(function(){
+  var c=document.getElementById('confetti'), ctx=c.getContext('2d'), P=[];
+  var cols=['#BA0C2F','#00205B','#ffffff','#1a1a1a','#DD0000','#FFCE00'];
+  function size(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  size(); window.addEventListener('resize',size);
+  function spawn(){
+    return {x:Math.random()*c.width,y:-20,vx:(Math.random()-.5)*1.2,vy:1+Math.random()*2,
+      r:Math.random()*Math.PI,vr:(Math.random()-.5)*.2,w:6+Math.random()*8,h:4+Math.random()*6,
+      col:cols[Math.floor(Math.random()*cols.length)]};
+  }
+  window.burst=function(n,cx,cy){
+    cx=cx||c.width/2; cy=cy||c.height/2;
+    for(var i=0;i<n;i++){
+      var a=Math.random()*Math.PI*2, sp=6+Math.random()*12, p=spawn();
+      p.x=cx; p.y=cy; p.vx=Math.cos(a)*sp; p.vy=Math.sin(a)*sp-6; p.g=true;
+      P.push(p);
+    }
+  };
+  function loop(){
+    var max=(celebrate||cakeOpen)?160:45;
+    if(P.length<max && Math.random()<((celebrate||cakeOpen)?.9:.25)) P.push(spawn());
+    ctx.clearRect(0,0,c.width,c.height);
+    for(var i=P.length-1;i>=0;i--){
+      var p=P[i]; if(p.g){p.vy+=.25;p.vx*=.985;if(p.vy>3.5){p.vy=3.5;p.g=false;p.vx*=.3;}} p.x+=p.vx+Math.sin(p.y/40)*.5; p.y+=p.vy; p.r+=p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.col;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.r*2))+1); ctx.restore();
+      if(p.y>c.height+20||p.x<-40||p.x>c.width+40) P.splice(i,1);
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+
+/* ---------- Geschenk öffnen → Torte ---------- */
+var cakeOpen=false, busy=false, autoClose=null;
+(function(){
+  var cg=document.getElementById('candles'), fg=document.getElementById('flames'), pg=document.getElementById('puffs');
+  var cols=['#BA0C2F','#fff','#00205B','#DD0000','#FFCE00','#fff','#BA0C2F','#FFCE00'];
+  var C=[[62,226],[82,226],[318,226],[338,226],[118,136],[282,136]], h='',f='',pf='';
+  for(var i=0;i<C.length;i++){
+    var x=C[i][0], top=C[i][1]-34, col=cols[i%cols.length];
+    h+='<rect x="'+(x-4.5)+'" y="'+top+'" width="9" height="36" rx="2" fill="'+col+'" stroke="#bbb" stroke-width="1"/>';
+    h+='<line x1="'+x+'" y1="'+top+'" x2="'+x+'" y2="'+(top-8)+'" stroke="#333" stroke-width="1.5"/>';
+    f+=flame(x,top-8,1);
+    pf+='<circle class="puff" cx="'+x+'" cy="'+(top-16)+'" r="7" fill="#ccc"/>';
+  }
+  f+=flame(170,66,1.4)+flame(230,66,1.4);
+  pf+='<circle class="puff" cx="170" cy="55" r="9" fill="#ccc"/><circle class="puff" cx="230" cy="55" r="9" fill="#ccc"/>';
+  cg.innerHTML=h; fg.innerHTML=f; pg.innerHTML=pf;
+  function flame(x,y,k){
+    return '<g class="flame"><ellipse cx="'+x+'" cy="'+(y-10*k)+'" rx="'+(7*k)+'" ry="'+(12*k)+'" fill="#ff9d00"/>'+
+           '<ellipse cx="'+x+'" cy="'+(y-7*k)+'" rx="'+(3.5*k)+'" ry="'+(7*k)+'" fill="#fff3a0"/>'+
+           '<circle cx="'+x+'" cy="'+(y-10*k)+'" r="'+(20*k)+'" fill="#ffd36b" opacity=".18"/></g>';
+  }
+})();
+
+function openGift(){
+  if(busy) return; busy=true;
+  var ov=document.getElementById('overlay'), bg=document.getElementById('bigGift'),
+      cake=document.getElementById('cake');
+  document.getElementById('gift').className='gone';
+  cake.className=''; cake.querySelector('svg').setAttribute('class','');
+  ov.className='show'; bg.style.display='block'; bg.className='shake';
+  setTimeout(function(){
+    bg.className='open'; burst(220);
+    setTimeout(function(){
+      bg.style.display='none'; ov.className='show cake'; cake.className='show';
+      cakeOpen=true; burst(180); playSong();
+      setTimeout(function(){burst(120,window.innerWidth*.2,window.innerHeight*.6);},700);
+      setTimeout(function(){burst(120,window.innerWidth*.8,window.innerHeight*.6);},1200);
+      busy=false;
+      autoClose=setTimeout(function(){closeGift();},90000);
+    },1100);
+  },1300);
+}
+function blowOut(){
+  var svg=document.querySelector('#cake svg');
+  if(svg.getAttribute('class')==='out'){ svg.setAttribute('class',''); return; } // wieder anzünden
+  svg.setAttribute('class','out');
+  document.getElementById('cakeText').textContent='Hurra! 🥳 Hipp hipp hurra!';
+  burst(250); setTimeout(function(){burst(200);},500);
+}
+function closeGift(e){
+  if(e) e.stopPropagation();
+  clearTimeout(autoClose); cakeOpen=false; busy=false;
+  document.getElementById('overlay').className='';
+  document.getElementById('gift').className='';
+  document.getElementById('bigGift').className='';
+  document.getElementById('cakeText').textContent='Zum Geburtstag viel Glück! 🎉';
+}
+
+/* "Zum Geburtstag viel Glück" – kleine Melodie (Web Audio) */
+function playSong(){
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    var ac=new AC(), t=ac.currentTime+.1;
+    var N={G4:392,A4:440,B4:493.9,C5:523.3,D5:587.3,E5:659.3,F5:698.5,G5:784};
+    var song=[['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+              ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+              ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+              ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',2.5]];
+    var beat=.42;
+    for(var i=0;i<song.length;i++){
+      var o=ac.createOscillator(), g=ac.createGain(), d=song[i][1]*beat;
+      o.type='triangle'; o.frequency.value=N[song[i][0]];
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.25,t+.03);
+      g.gain.exponentialRampToValueAtTime(.001,t+d*.95);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+d);
+      t+=d;
+    }
+  }catch(err){}
+}
+
+/* Seite alle 6 Stunden neu laden (falls Datei aktualisiert wurde) */
+setInterval(function(){ if(!cakeOpen) location.reload(); },6*3600*1000);
+</script>
+</body>
+</html>
